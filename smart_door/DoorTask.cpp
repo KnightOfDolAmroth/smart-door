@@ -5,6 +5,7 @@
 #define MSG_TIMEOUT "S:Timeout"
 #define MSG_TEMP "Temperature: "
 #define MSG_HELLO "You are in range"
+#define MSG_TOO_FAR "You are no longer in range"
 #define MSG_SUCCESS "You are authenticated"
 #define MSG_FAIL "You are not logged"
 
@@ -33,6 +34,7 @@ void DoorTask::tick(){
     
       case IDLE: {
         if (prox->getDistance() <= MIN_DIST) {
+          pDoor->setPermissionOk(false);
           state = WAITING;
         }
         break;
@@ -42,6 +44,7 @@ void DoorTask::tick(){
         timeToWait += myPeriod;
         if (prox->getDistance() > MIN_DIST) {
           state = IDLE;
+          pDoor->sendToBt(MSG_TOO_FAR);
         } else if (timeToWait >= MIN_SEC*1000) {
           state = AUTHENTICATION;
           timeToWait = 0;
@@ -53,6 +56,7 @@ void DoorTask::tick(){
       case AUTHENTICATION: {
         if (prox->getDistance() > MIN_DIST) {
           state = IDLE;
+          pDoor->sendToBt(MSG_TOO_FAR);
         } else if (pDoor->isInfoToOpen()){
           pDoor->sendToSerial("A:" + pDoor->getUsername() + ":" + pDoor->getPassword());
           pDoor->setInfoToOpen(false);

@@ -1,9 +1,9 @@
 #include "SerialCommTask.h"
 #include "Config.h"
 
-#define MSG_VALID_OK "Valid:OK"
-#define MSG_VALID_KO "Valid:KO"
-#define MSG_INFORMATION "Info"
+#define MSG_VALID_OK "Valid:T"
+#define MSG_VALID_KO "Valid:F"
+#define MSG_INFORMATION "InfoRequest"
 
 SerialCommTask::SerialCommTask(Door* pDoor){
   this->pDoor = pDoor;

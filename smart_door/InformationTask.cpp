@@ -15,7 +15,11 @@ void InformationTask::init(int period){
   
 void InformationTask::tick(){
   if (pDoor->isSystemInfo()) {
-    pDoor->sendToSerial(MSG_INFORMATION + String(temp->readTemperature()) + ":" + String(map(ledValue->getCurrentIntensity(),0,255,0,100)));
+    if (map(ledValue->getCurrentIntensity(),0,255,0,100) != 0 && map(ledValue->getCurrentIntensity(),0,255,0,100) != 100) {
+      pDoor->sendToSerial(MSG_INFORMATION + String(temp->readTemperature()) + ":" + String(map(ledValue->getCurrentIntensity(),0,255,0,100)+1));
+    } else {
+      pDoor->sendToSerial(MSG_INFORMATION + String(temp->readTemperature()) + ":" + String(map(ledValue->getCurrentIntensity(),0,255,0,100))); 
+    }
     pDoor->setSystemInfo(false);
   }
 }

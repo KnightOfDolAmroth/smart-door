@@ -17,6 +17,7 @@ void BtCommTask::init(int period){
   
 void BtCommTask::tick(){
   if (msgBtService->isMsgAvailable()){
+    delay(15); //Time to wait the end of transmission to properly read the string value and the timer
     Msg* msg = msgBtService->receiveMsg(); 
     const String& content = msg->getContent();
     if (content.startsWith(MSG_AUTHENTICATION)){

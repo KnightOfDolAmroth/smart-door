@@ -1,0 +1,1 @@
+java -cp bin:/usr/share/java/RXTXcomm.jar:/opt/pi4j/lib/'*' -Dpi4j.linking=dynamic consegna_4.Main [qui ci metti la porta per lanciarlo normalmente, o niente se vuoi lanciare uno scan delle porte]

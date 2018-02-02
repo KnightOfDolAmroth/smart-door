@@ -14,6 +14,14 @@ public class InformationServer extends Thread {
         server = new ServerSocket(SERVER_PORT);
         this.logInfoProvider = logInfoProvider;
         this.roomInfoProvider = roomInfoProvider;
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                server.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }));
     }
 
     @Override

@@ -71,7 +71,9 @@ public class ObservableSerialRXTX extends ObservableSerial {
     @Override
     public void sendMsg(String msg) {
         try {
+			msg += "\n";
             output.write(msg.getBytes());
+            output.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,13 +1,13 @@
 #include "DoorTask.h"
 
-#define MSG_START_WORKING "S:Begin"
-#define MSG_END_SESSION "S:Stop"
-#define MSG_TIMEOUT "S:Timeout"
-#define MSG_TEMP "Temperature: "
-#define MSG_HELLO "You are in range"
-#define MSG_TOO_FAR "You are no longer in range"
-#define MSG_SUCCESS "You are authenticated"
-#define MSG_FAIL "You are not logged"
+#define MSG_START_WORKING "S:B"
+#define MSG_END_SESSION "S:S"
+#define MSG_TIMEOUT "S:T"
+#define MSG_TEMP "Temp:"
+#define MSG_HELLO "Hello"
+#define MSG_TOO_FAR "Bye"
+#define MSG_SUCCESS "Valid:T"
+#define MSG_FAIL "Valid:F"
 
 DoorTask::DoorTask(Door* pDoor, LedExt* ledExt, TempSensor* temp, Servo servo){
   this->servo = servo;

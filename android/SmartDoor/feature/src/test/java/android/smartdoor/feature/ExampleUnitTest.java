@@ -1,4 +1,4 @@
-package android.smart_door;
+package android.smartdoor.feature;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package android.smart_door;
+package android.smartdoor.feature;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("android.smart_door", appContext.getPackageName());
+        assertEquals("android.smartdoor.feature.test", appContext.getPackageName());
     }
 }

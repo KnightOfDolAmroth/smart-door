@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="android.smartdoor.feature">
 
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+
     <application>
         <activity android:name=".MainActivity">
             <intent-filter android:order="1">

@@ -13,7 +13,7 @@
 
 #define DOOR_DURATION 2000
 #define MAX_DELAY 10000
-#define MIN_DIST 0.5
+#define MIN_DIST 0.8
 #define MIN_SEC 1
 #define CLOSE_DEG 0
 #define OPEN_DEG 175

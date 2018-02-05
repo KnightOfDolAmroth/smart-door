@@ -8,6 +8,7 @@
 #define MSG_TOO_FAR "Bye"
 #define MSG_SUCCESS "Valid:T"
 #define MSG_FAIL "Valid:F"
+#define DELTA 0.4
 
 DoorTask::DoorTask(Door* pDoor, LedExt* ledExt, TempSensor* temp, Servo servo){
   this->servo = servo;
@@ -42,7 +43,7 @@ void DoorTask::tick(){
 
       case WAITING: {
         timeToWait += myPeriod;
-        if (prox->getDistance() > MIN_DIST) {
+        if (prox->getDistance() > MIN_DIST + DELTA) {
           state = IDLE;
           pDoor->sendToBt(MSG_TOO_FAR);
         } else if (timeToWait >= MIN_SEC*1000) {
@@ -54,7 +55,7 @@ void DoorTask::tick(){
       }
 
       case AUTHENTICATION: {
-        if (prox->getDistance() > MIN_DIST) {
+        if (prox->getDistance() > MIN_DIST + DELTA) {
           state = IDLE;
           pDoor->sendToBt(MSG_TOO_FAR);
         } else if (pDoor->isInfoToOpen()){

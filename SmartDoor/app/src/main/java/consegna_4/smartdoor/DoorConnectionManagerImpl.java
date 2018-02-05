@@ -1,15 +1,16 @@
-package android.smartdoor.feature;
+package consegna_4.smartdoor;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.os.Handler;
+import consegna_4.smartdoor.ObservableDoorStatus.Status;
 import android.util.Log;
 
 import java.io.IOException;
 import java.util.Set;
 import java.util.UUID;
 
-public class DoorConnectionTask {
+public class DoorConnectionManagerImpl implements DoorConnectionManager {
     private static final UUID DEFAULT_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     private static final long TEMP_UPDATE_REQUEST_MS_PERIOD = 500;
@@ -18,12 +19,13 @@ public class DoorConnectionTask {
     private static final String MSG_VALUE_SET_PREFIX = "Value:";
     private static final String MSG_ACCESS_PREFIX = "A:";
     private static final String MSG_ACCESS_SEPARATOR = ":";
-
-    private final MainActivity activity;
+    private static final String MSG_STOP_SESSION = "End";
 
     private boolean connected = false;
 
     private final Handler handler = new Handler();
+
+    private final ObservableDoorStatusImpl doorStatus;
 
     private final Runnable tempUpdateRequester = new Runnable() {
         @Override
@@ -35,9 +37,20 @@ public class DoorConnectionTask {
         }
     };
 
-    public DoorConnectionTask(MainActivity activity) {
-        this.activity = activity;
+    private static DoorConnectionManager instance = new DoorConnectionManagerImpl();
+
+    public static DoorConnectionManager getInstance() {
+        return instance;
+    }
+
+    private DoorConnectionManagerImpl() {
         BTConnection.getInstance().addObserver(new BTMessageParser());
+        this.doorStatus = new ObservableDoorStatusImpl();
+    }
+
+    @Override
+    public ObservableDoorStatus getDoorStatus() {
+        return doorStatus;
     }
 
     /**
@@ -45,6 +58,7 @@ public class DoorConnectionTask {
      * @throws IllegalArgumentException if the device specified is not paired
      * @throws IllegalStateException    if bluetooth is not enabled or device is already connected
      */
+    @Override
     public synchronized void initializeConnection(String BTDeviceName) {
         if (connected) {
             throw new IllegalStateException("Already connected to device");
@@ -66,30 +80,29 @@ public class DoorConnectionTask {
             public void notifyConnectionStatus(boolean connectionSuccessful) {
                 updateConnectionStatus(connectionSuccessful);
             }
-        });
+        }).execute();
     }
 
-    public synchronized boolean AttemptAccess(String username, String password) {
+    @Override
+    public synchronized boolean attemptAccess(String username, String password) {
         return tryWrite(MSG_ACCESS_PREFIX + username + MSG_ACCESS_SEPARATOR + password);
     }
 
-    public synchronized boolean SetValue(int value) {
+    @Override
+    public synchronized boolean setValue(int value) {
         if (value < 0 || value > 100) {
             throw new IllegalArgumentException("Value must be between 0 and 100 included");
         }
-        /*
-        if (!connected) {
-            throw new IllegalStateException("Not connected");
-        }
-        if (state != State.SESSION) {
-            throw new IllegalStateException("Not in a session");
-        }
-        */
         return tryWrite(MSG_VALUE_SET_PREFIX + value);
     }
 
+    @Override
+    public synchronized boolean stopSession() {
+        return tryWrite(MSG_STOP_SESSION);
+    }
+
     private boolean tryWrite(String msg) {
-        if (!connected) {
+        if (connected) {
             try {
                 BTConnection.getInstance().write(msg);
                 return true;
@@ -103,58 +116,58 @@ public class DoorConnectionTask {
     private synchronized void updateConnectionStatus(boolean connected) {
         if (connected != this.connected) {
             this.connected = connected;
-            activity.updateConnectionStatus(connected);
+            doorStatus.setConnected(connected);
         }
     }
 
-    private void startSession() {
-        activity.updateConnectionStatus(true);
+    private synchronized void sessionStarted() {
+        doorStatus.setCurrentStatus(Status.IN_SESSION);
         tempUpdateRequester.run();
     }
 
-    private void stopSession() {
-        activity.updateConnectionStatus(false);
+    private synchronized void sessionStopped() {
+        doorStatus.setCurrentStatus(Status.NO_RANGE);
         handler.removeCallbacks(tempUpdateRequester);
     }
 
     private class BTMessageParser implements ConnectionObserver {
-        private static final String MSG_S_TIMEOUT = "S:Timeout";
-        private static final String MSG_S_BEGIN = "S:Begin";
-        private static final String MSG_S_STOP = "S:Stop";
+        private static final String MSG_S_TIMEOUT = "S:T";
+        private static final String MSG_S_BEGIN = "S:B";
+        private static final String MSG_S_STOP = "S:S";
         private static final String MSG_HELLO = "Hello";
         private static final String MSG_BYE = "Bye";
         private static final String MSG_ACCESS_OK = "Valid:T";
         private static final String MSG_ACCESS_NOT_OK = "Valid:F";
-        private static final String MSG_TEMP_PREFIX = "Temperature: ";
+        private static final String MSG_TEMP_PREFIX = "Temp:";
 
         @Override
         public void notifyDataReceived(String msg) {
-            synchronized (DoorConnectionTask.this) {
+            synchronized (DoorConnectionManagerImpl.this) {
                 if (connected) {
                     switch (msg) {
                         case MSG_HELLO:
-                            activity.updateRange(true);
+                            doorStatus.setCurrentStatus(Status.RANGE);
                             break;
                         case MSG_BYE:
-                            activity.updateRange(false);
+                            doorStatus.setCurrentStatus(Status.NO_RANGE);
                             break;
                         case MSG_S_BEGIN:
-                            startSession();
+                            sessionStarted();
                             break;
                         case MSG_S_STOP: case MSG_S_TIMEOUT:
-                            stopSession();
+                            sessionStopped();
                             break;
                         case MSG_ACCESS_OK:
-                            activity.updateAuthentication(true);
+                            doorStatus.setCurrentStatus(Status.WAITING_SESSION_BEGIN);
                             break;
                         case MSG_ACCESS_NOT_OK:
-                            activity.updateAuthentication(false);
+                            doorStatus.setCurrentStatus(Status.WRONG_CREDENTIALS);
                             break;
                         default:
                             if (msg.startsWith(MSG_TEMP_PREFIX)) {
                                 try {
                                     int temp = Integer.parseInt(msg.substring(MSG_TEMP_PREFIX.length()));
-                                    activity.updateTemp(temp);
+                                    doorStatus.setTemp(temp);
                                 } catch (NumberFormatException e) {
                                     unknownMessage(msg);
                                 }

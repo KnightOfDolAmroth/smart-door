@@ -1,4 +1,4 @@
-package android.smartdoor.feature;
+package android.smartdoor.feature.android.smartdoor.feature.connection;
 
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
@@ -80,7 +80,7 @@ public class BTConnection extends Thread {
         if (writer == null) {
             throw new IllegalStateException("BT channel was not set up correctly");
         }
-        writer.write(msg);
+        writer.write(msg + "\n");
         writer.flush();
     }
 

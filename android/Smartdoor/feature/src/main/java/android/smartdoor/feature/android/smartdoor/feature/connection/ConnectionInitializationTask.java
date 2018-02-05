@@ -1,4 +1,4 @@
-package android.smartdoor.feature;
+package android.smartdoor.feature.android.smartdoor.feature.connection;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;

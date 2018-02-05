@@ -2,16 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://C:\Users\utente\Desktop\ConsegneEmbedded\smart-door\android\Smartdoor\SmartDoor.iml" filepath="C:\Users\utente\Desktop\ConsegneEmbedded\smart-door\android\Smartdoor\SmartDoor.iml" />
       <module fileurl="file://$PROJECT_DIR$/Smartdoor.iml" filepath="$PROJECT_DIR$/Smartdoor.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\utente\Desktop\ConsegneEmbedded\smart-door\android\Smartdoor\app\app.iml" filepath="C:\Users\utente\Desktop\ConsegneEmbedded\smart-door\android\Smartdoor\app\app.iml" />
       <module fileurl="file://$PROJECT_DIR$/base/base.iml" filepath="$PROJECT_DIR$/base/base.iml" />
-      <module fileurl="file://C:\Users\utente\Desktop\ConsegneEmbedded\smart-door\android\Smartdoor\base\base.iml" filepath="C:\Users\utente\Desktop\ConsegneEmbedded\smart-door\android\Smartdoor\base\base.iml" />
       <module fileurl="file://$PROJECT_DIR$/feature/feature.iml" filepath="$PROJECT_DIR$/feature/feature.iml" />
-      <module fileurl="file://C:\Users\utente\Desktop\ConsegneEmbedded\smart-door\android\Smartdoor\feature\feature.iml" filepath="C:\Users\utente\Desktop\ConsegneEmbedded\smart-door\android\Smartdoor\feature\feature.iml" />
       <module fileurl="file://$PROJECT_DIR$/instantapp/instantapp.iml" filepath="$PROJECT_DIR$/instantapp/instantapp.iml" />
-      <module fileurl="file://C:\Users\utente\Desktop\ConsegneEmbedded\smart-door\android\Smartdoor\instantapp\instantapp.iml" filepath="C:\Users\utente\Desktop\ConsegneEmbedded\smart-door\android\Smartdoor\instantapp\instantapp.iml" />
     </modules>
   </component>
 </project>

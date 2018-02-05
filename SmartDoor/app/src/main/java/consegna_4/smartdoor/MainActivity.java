@@ -1,16 +1,14 @@
-package android.smartdoor.feature;
+package consegna_4.smartdoor;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.smartdoor.feature.android.smartdoor.feature.connection.DoorConnectionManager;
-import android.smartdoor.feature.android.smartdoor.feature.connection.DoorConnectionManagerImpl;
 import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends Activity implements StatusObserver {
 
-    private static final String BT_NAME = "ISI04"; //TODO
+    private static final String BT_NAME = "isi04"; //TODO
     private final DoorConnectionManager model = DoorConnectionManagerImpl.getInstance();
     private Button buttonConnection;
     /*private final Button btAuthentication = (Button) findViewById(R.id.access);

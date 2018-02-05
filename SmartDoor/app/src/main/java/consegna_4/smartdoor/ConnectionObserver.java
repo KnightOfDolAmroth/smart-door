@@ -1,4 +1,4 @@
-package android.smartdoor.feature;
+package consegna_4.smartdoor;
 
 public interface ConnectionObserver {
     void notifyDataReceived(String msg);

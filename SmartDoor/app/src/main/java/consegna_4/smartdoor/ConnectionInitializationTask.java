@@ -30,11 +30,7 @@ public class ConnectionInitializationTask extends AsyncTask<Void, Void, Boolean>
             return false;
         }
         BTConnection cm = BTConnection.getInstance();
-        if (cm.setChannel(btSocket)) {
-            cm.start();
-            return true;
-        }
-        return false;
+        return cm.setChannelAndStart(btSocket);
     }
 
     @Override

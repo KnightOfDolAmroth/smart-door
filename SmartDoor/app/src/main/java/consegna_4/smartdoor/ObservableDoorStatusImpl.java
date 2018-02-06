@@ -1,5 +1,7 @@
 package consegna_4.smartdoor;
 
+import android.util.Log;
+
 import java.util.HashSet;
 import java.util.Set;
 

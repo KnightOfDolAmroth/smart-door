@@ -9,5 +9,5 @@ public interface DoorConnectionManager {
 
     boolean stopSession();
 
-    public ObservableDoorStatus getDoorStatus();
+    ObservableDoorStatus getDoorStatus();
 }

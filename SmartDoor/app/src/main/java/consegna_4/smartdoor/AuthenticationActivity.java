@@ -27,9 +27,9 @@ public class AuthenticationActivity extends Activity implements StatusObserver{
         active = true;
 
         model.getDoorStatus().addObserver(this);
-        buttonAuthentication = findViewById(R.id.access);
-        username = findViewById(R.id.textUsername);
-        password = findViewById(R.id.textPassword);
+        buttonAuthentication = (Button) findViewById(R.id.access);
+        username = (EditText) findViewById(R.id.textUsername);
+        password = (EditText) findViewById(R.id.textPassword);
 
         if(model.getDoorStatus().getCurrentStatus() == Status.NO_RANGE) {
             buttonAuthentication.setEnabled(false);
@@ -65,6 +65,11 @@ public class AuthenticationActivity extends Activity implements StatusObserver{
         super.onDestroy();
         active = false;
         model.getDoorStatus().removeObserver(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        //disable going back from here
     }
 
     @Override

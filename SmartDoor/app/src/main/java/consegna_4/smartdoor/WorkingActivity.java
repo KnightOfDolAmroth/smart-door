@@ -2,6 +2,7 @@ package consegna_4.smartdoor;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,10 +26,10 @@ public class WorkingActivity extends Activity implements StatusObserver {
         active = true;
 
         model.getDoorStatus().addObserver(this);
-        buttonIntensity = findViewById(R.id.buttonIntensity);
-        buttonEnd = findViewById(R.id.buttonEnd);
-        intensity = findViewById(R.id.textIntensity);
-        temperature = findViewById(R.id.textTemperature);
+        buttonIntensity = (Button) findViewById(R.id.buttonIntensity);
+        buttonEnd = (Button) findViewById(R.id.buttonEnd);
+        intensity = (EditText) findViewById(R.id.textIntensity);
+        temperature = (TextView) findViewById(R.id.textTemperature);
 
         if (model.getDoorStatus().getCurrentStatus() == ObservableDoorStatus.Status.NO_RANGE) {
             active = false;
@@ -49,9 +50,7 @@ public class WorkingActivity extends Activity implements StatusObserver {
             buttonEnd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    model.stopSession();
-                    buttonEnd.setEnabled(false);
-                    buttonIntensity.setEnabled(false);
+                    onBackPressed();
                 }
             });
         }
@@ -67,6 +66,15 @@ public class WorkingActivity extends Activity implements StatusObserver {
     public void onStop() {
         super.onStop();
         active = false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (buttonEnd.isEnabled()) {
+            model.stopSession();
+            buttonEnd.setEnabled(false);
+            buttonIntensity.setEnabled(false);
+        }
     }
 
     @Override

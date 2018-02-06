@@ -13,6 +13,10 @@ import java.util.UUID;
 public class DoorConnectionManagerImpl implements DoorConnectionManager {
     private static final UUID DEFAULT_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
+    private static final String BT_NOT_ENABLED_MSG = "Il bluetooth non è abilitato";
+    private static final String DEVICE_NOT_PAIRED_MSG = "Il dispositivo specificato non è accoppiato";
+
+
     private static final long TEMP_UPDATE_REQUEST_MS_PERIOD = 500;
 
     private static final String MSG_TEMP_REQUEST = "Temp?";
@@ -64,7 +68,7 @@ public class DoorConnectionManagerImpl implements DoorConnectionManager {
             throw new IllegalStateException("Already connected to device");
         }
         if (!BluetoothAdapter.getDefaultAdapter().isEnabled()) {
-            throw new IllegalStateException("Bluetooth is not enabled");
+            throw new IllegalStateException(BT_NOT_ENABLED_MSG);
         }
         BluetoothDevice targetDevice = null;
         Set<BluetoothDevice> pairedList = BluetoothAdapter.getDefaultAdapter().getBondedDevices();
@@ -73,7 +77,7 @@ public class DoorConnectionManagerImpl implements DoorConnectionManager {
                 targetDevice = device;
         }
         if (targetDevice == null) {
-            throw new IllegalArgumentException("Specified device is not paired");
+            throw new IllegalArgumentException(DEVICE_NOT_PAIRED_MSG);
         }
         new ConnectionInitializationTask(targetDevice, DEFAULT_UUID, new ConnectionUser() {
             @Override
@@ -114,10 +118,10 @@ public class DoorConnectionManagerImpl implements DoorConnectionManager {
     }
 
     private synchronized void updateConnectionStatus(boolean connected) {
-        if (connected != this.connected) {
+        //if (connected != this.connected) {
             this.connected = connected;
             doorStatus.setConnected(connected);
-        }
+        //}
     }
 
     private synchronized void sessionStarted() {

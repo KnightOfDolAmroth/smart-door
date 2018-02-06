@@ -95,7 +95,7 @@ public class WorkingActivity extends Activity implements StatusObserver {
                         active = false;
                         finish();
                     } else {
-                        if (doorStatus.getCurrentStatus() == ObservableDoorStatus.Status.NO_RANGE) {
+                        if (doorStatus.getCurrentStatus() != ObservableDoorStatus.Status.IN_SESSION) {
                             buttonEnd.setEnabled(false);
                             buttonIntensity.setEnabled(false);
                             finish();

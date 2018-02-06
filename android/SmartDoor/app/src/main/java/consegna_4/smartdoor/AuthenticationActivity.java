@@ -98,6 +98,7 @@ public class AuthenticationActivity extends Activity implements StatusObserver{
                                 buttonAuthentication.setEnabled(true);
                                 break;
                             case IN_SESSION:
+                                active = false;
                                 Intent intent = new Intent(AuthenticationActivity.this, WorkingActivity.class);
                                 startActivity(intent);
                                 break;

@@ -45,7 +45,6 @@ void DoorTask::tick(){
         timeToWait += myPeriod;
         if (prox->getDistance() > MIN_DIST + DELTA) {
           state = IDLE;
-          pDoor->sendToBt(MSG_TOO_FAR);
         } else if (timeToWait >= MIN_SEC*1000) {
           state = AUTHENTICATION;
           timeToWait = 0;

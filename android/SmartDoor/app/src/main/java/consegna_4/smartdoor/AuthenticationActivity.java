@@ -45,8 +45,8 @@ public class AuthenticationActivity extends Activity implements StatusObserver{
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
         if (model.getDoorStatus().isConnected()) {
             active = true;
         } else {
@@ -55,15 +55,8 @@ public class AuthenticationActivity extends Activity implements StatusObserver{
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        active = false;
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
-        active = false;
         model.getDoorStatus().removeObserver(this);
     }
 

@@ -31,7 +31,7 @@ public class WorkingActivity extends Activity implements StatusObserver {
         intensity = (EditText) findViewById(R.id.textIntensity);
         temperature = (TextView) findViewById(R.id.textTemperature);
 
-        if (model.getDoorStatus().getCurrentStatus() == ObservableDoorStatus.Status.NO_RANGE) {
+        if (model.getDoorStatus().getCurrentStatus() != ObservableDoorStatus.Status.IN_SESSION) {
             active = false;
             finish();
         } else {
@@ -50,26 +50,24 @@ public class WorkingActivity extends Activity implements StatusObserver {
             buttonEnd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onBackPressed();
+                    sendEnd();
                 }
             });
         }
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
         active = true;
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        active = false;
+    public void onBackPressed() {
+        sendEnd();
     }
 
-    @Override
-    public void onBackPressed() {
+    private void sendEnd() {
         if (buttonEnd.isEnabled()) {
             model.stopSession();
             buttonEnd.setEnabled(false);
@@ -80,7 +78,6 @@ public class WorkingActivity extends Activity implements StatusObserver {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        active = false;
         model.getDoorStatus().removeObserver(this);
     }
 
@@ -98,6 +95,7 @@ public class WorkingActivity extends Activity implements StatusObserver {
                         if (doorStatus.getCurrentStatus() != ObservableDoorStatus.Status.IN_SESSION) {
                             buttonEnd.setEnabled(false);
                             buttonIntensity.setEnabled(false);
+                            active = false;
                             finish();
                         } else {
                             temperature.setText("Temperatura: " + doorStatus.getTemp());

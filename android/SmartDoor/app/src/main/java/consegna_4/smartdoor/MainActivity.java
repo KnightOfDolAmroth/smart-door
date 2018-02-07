@@ -18,16 +18,10 @@ public class MainActivity extends Activity implements StatusObserver {
     private EditText deviceName;
 
     @Override
-    public void onStart() {
-        super.onStart();
-        buttonConnection.setEnabled(true);
+    public void onResume() {
+        super.onResume();
         active = true;
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        active = false;
+        buttonConnection.setEnabled(true);
     }
 
     @Override
@@ -58,6 +52,7 @@ public class MainActivity extends Activity implements StatusObserver {
                 @Override
                 public void run() {
                     if (model.getDoorStatus().isConnected()) {
+                        active = false;
                         Intent intent = new Intent(MainActivity.this, AuthenticationActivity.class);
                         startActivity(intent);
                     } else {

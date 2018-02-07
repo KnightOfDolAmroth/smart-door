@@ -8,6 +8,7 @@ import consegna_4.synchronization.ObservableCredentialValidationRequester;
 import consegna_4.synchronization.ObservableDoorCommander;
 import consegna_4.synchronization.ObservableInformationUpdater;
 import consegna_4.synchronization.ObservableSessionUpdater;
+import consegna_4.seiot.devices.impl.Led;
 import gnu.io.CommPortIdentifier;
 
 public class Main {
@@ -33,8 +34,8 @@ public class Main {
             CommTask commTask = new CommTask(new ObservableSerialRXTX(args[0]), doorCommander,
                     credentialValidationRequester, informationUpdater, sessionUpdater);
             MainTask mainTask = new MainTask(doorCommander, credentialChecker, sessionUpdater,
-                    credentialValidationRequester, null,
-                    null /* lInside, lFailed */);
+                    credentialValidationRequester, new Led(5),
+                    new Led(4) /* lInside, lFailed */);
             LogInfoProviderImpl logInfoProvider = new LogInfoProviderImpl();
             RoomInfoProviderImpl roomInfoProvider = new RoomInfoProviderImpl(doorCommander, informationUpdater);
             InformationServer informationServer = new InformationServer(logInfoProvider, roomInfoProvider);
